@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Calendar;
 
 use Illuminate\Http\Request;
 use App\Models\Services as Service;
@@ -24,8 +24,16 @@ class CalendarController extends Controller
     public function getCalendar(Request $request)
     {
         $calendarObj = new Service\calendar();
-        $data = $calendarObj->getCalendar($request->all());
-        //dd($data);
+        $data = $calendarObj->getCalendar('kzk0829');
+        return view('calendar', compact('data'));
+    }
+
+    public function update(Request $request)
+    {
+        $nortificationObj = new Service\nortification();
+        $calendarObj = new Service\calendar();
+        $result = $nortificationObj->dataUpdate($request->all());
+        $data = $calendarObj->getCalendar('kzk0829');
         return view('calendar', compact('data'));
     }
 

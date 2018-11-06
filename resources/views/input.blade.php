@@ -1,16 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head lang="ja">
-    <title></title>
-    <meta charset="utf-8">
-</head>
-<body>
-    <h1>hello,world</h1>
-    {{$data}}
+@extends('layouts.layout')
+@section('content')
+
+
+
     <form action="/getCalendar" method="GET">
-        <input type="text" name="user_id" id="">
+        <input type="text" name="user_id" id="" placeholder="ユーザーIDを入力">
         <input type="submit" name="">
     </form>
+    <br>
 
-</body>
-</html>
+
+
+@endsection

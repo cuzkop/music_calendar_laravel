@@ -13,43 +13,30 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
-class calendar extends Model
+class nortification extends Model
 {
 
-    public function __construct()
-    {
-    }
-
-    public function index()
-    {
-        $hello = 'hello,world';
-        return $hello;
-    }
-
     /**
-     * user_idを元にカレンダー取得
+     * カレンダー取得
      */
     public function getCalendar($userId)
     {
         $usersObj = new Data\Users();
         $eventObj = new Data\Event();
+        $calendarObj = new Data\Calendar();
         $id = $usersObj->fetchByUserId($userId);
-        $event = $eventObj->fetchEventByUserId($id[0]);
+        $event = $eventObj->fetchUnChengedEventByUserId($id[0]);
         foreach ($event as $key => $value) {
             $date = $this->fixStartDate($value->start_date_time);
             $time = $this->fixEndDate($value->start_date_time);
             unset($event[$key]->start_date_time, $event[$key]->end_date_time);
             $event[$key]->date = $date;
             $event[$key]->time = $time;
-            $event[$key]->todayFlg = 0;
-            $event[0]->todayFlg = 1;
         }
         return $event;
     }
 
-    /**
-     * 終了時刻修正
-     */
+
     private function fixEndDate($value)
     {
         $datetime = new Carbon($value);
@@ -58,13 +45,31 @@ class calendar extends Model
 
     }
 
-    /**
-     * 開始時刻修正
-     */
     private function fixStartDate($value)
     {
         $datetime = new Carbon($value);
         $data = $datetime->format('Y/m/d');
         return $data;
     }
+
+    /**
+     * 日程を通知画面から追加するかどうか
+     */
+    public function dataUpdate($request)
+    {
+        $calendarObj = new Data\Calendar();
+        $usersObj = new Data\Users();
+        $id = $usersObj->fetchByUserId('kzk0829');
+        if (isset($request['add']) == true) {
+            $result = $calendarObj->addUpdate($request, $id);
+        } else {
+            $result = $calendarObj->rejectUpdate($request, $id);
+        }
+        return $result;
+    }
+
+
+
+
+
 }
