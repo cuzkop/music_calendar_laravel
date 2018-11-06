@@ -42,7 +42,6 @@ class nortification extends Model
         $datetime = new Carbon($value);
         $data = $datetime->format('H:i');
         return $data;
-
     }
 
     private function fixStartDate($value)
